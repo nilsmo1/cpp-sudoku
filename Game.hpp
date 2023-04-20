@@ -11,5 +11,6 @@ public:
     Game();
     void gen_board();
     void render_lines(sf::RenderWindow&);
+    void render_numbers(sf::RenderWindow&);
     void run();
 };
