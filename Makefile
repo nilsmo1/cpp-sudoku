@@ -1,5 +1,6 @@
 CXX=g++
 CPPFILES=main.cpp Board.cpp Game.cpp
+CXXFLAGS=-Wall -Wextra
 LIBFLAGS=-lsfml-graphics -lsfml-window -lsfml-system
 OBJDIR=./obj
 OBJFILES=$(patsubst %.cpp,$(OBJDIR)/%.o, $(CPPFILES))
@@ -9,7 +10,7 @@ all: $(BINARY)
 
 $(BINARY): $(OBJFILES)
 	@echo "Creating binary.."
-	$(CXX) -o $@ $^ $(LIBFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBFLAGS)
 
 $(OBJFILES): | $(OBJDIR)
 
@@ -17,7 +18,7 @@ $(OBJDIR):
 	mkdir -p $(OBJDIR)
 
 $(OBJDIR)/%.o: %.cpp
-	$(CXX) -c -o $@ $^
+	$(CXX) $(CXXFLAGS) -c -o $@ $^
 
 run: $(BINARY)
 	@./$(BINARY)

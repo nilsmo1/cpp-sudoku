@@ -6,16 +6,17 @@
 #include <utility>
 
 class Board {
+    std::string m_config_string;
+public:
+    Board(std::string);
     int m_rows = 9;
     int m_cols = 9;
     int m_size = m_rows*m_cols;
-    std::string m_config_string;
     std::vector<int> m_grid = std::vector<int>(m_size, 0);
     std::vector<int> m_solution = std::vector<int>(m_size, 0);
-public:
-    Board(std::string);
     void parse_string();
     int get_index(int, int);
+    int at(int, int);
     void place_number(int, int, int);
     void mark_number(int, int, int);
     bool in_row(int, int);
