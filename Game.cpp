@@ -3,8 +3,6 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-const sf::Color LIGHT(255, 255, 255, 120);
-
 Game::Game() {}
 
 void Game::gen_board() {}
@@ -68,8 +66,8 @@ void Game::render_lines(sf::RenderWindow& win) {
         };
         sf::Vertex thin_linev[] =
         {
-            sf::Vertex(sf::Vector2f(10.f + i*small_step,        10.f), LINE_THIN),
-            sf::Vertex(sf::Vector2f(10.f + i*small_step, HEIGHT-10.f), LINE_THIN)
+            sf::Vertex(sf::Vector2f(10.f + i*small_step,        10.5f), LINE_THIN),
+            sf::Vertex(sf::Vector2f(10.f + i*small_step, HEIGHT-8.5f), LINE_THIN)
         };
         win.draw(thin_linev, 2, sf::Lines);
         win.draw(thin_lineh, 2, sf::Lines);
@@ -83,8 +81,8 @@ void Game::render_lines(sf::RenderWindow& win) {
         };
         sf::Vertex linev[] =
         {
-            sf::Vertex(sf::Vector2f(10.f + i*big_step,        10.f), LINE_THICK),
-            sf::Vertex(sf::Vector2f(10.f + i*big_step, HEIGHT-10.f), LINE_THICK)
+            sf::Vertex(sf::Vector2f(10.f + i*big_step,        10.5f), LINE_THICK),
+            sf::Vertex(sf::Vector2f(10.f + i*big_step, HEIGHT-8.5f), LINE_THICK)
         };
         win.draw(linev, 2, sf::Lines);
         win.draw(lineh, 2, sf::Lines);
@@ -149,9 +147,12 @@ void Game::run() {
                     } else if (event.key.code > sf::Keyboard::Num0 &&
                                event.key.code <= sf::Keyboard::Num9) {
                         int d = event.key.code - sf::Keyboard::Num0;
-                        if (m_cellx >= 0 && m_cellx < 9 && m_celly >= 0 && m_celly < 9)
-                            board.place_number(m_celly, m_cellx, d);
-
+                        if (m_mode > 0) {
+                            if (m_cellx >= 0 && m_cellx < 9 && m_celly >= 0 && m_celly < 9)
+                                board.place_number(m_celly, m_cellx, d);
+                        }
+                    } else if (event.key.code == sf::Keyboard::E) {
+                        m_mode *= -1;
                     } else if (event.key.code == sf::Keyboard::D) {
                         unselect_cell();
                     } else if (event.key.code == sf::Keyboard::S) {

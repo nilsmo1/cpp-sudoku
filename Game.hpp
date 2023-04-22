@@ -9,7 +9,7 @@ class Game {
     std::string m_board_string;
     const int HEIGHT = 600;
     const int WIDTH = 600;
-    int mode = 0; // place, marking or mark 
+    int m_mode = 1;
     sf::RectangleShape hl_rect;
     bool dark_mode = true;
     sf::Color LINE_THIN, LINE_THICK, HIGHLIGHT, BACK, NUMBER;
