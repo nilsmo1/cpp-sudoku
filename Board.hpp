@@ -21,9 +21,10 @@ public:
     void mark_number(int, int, int);
     bool in_row(int, int);
     bool in_col(int, int);
-    bool in_box(int, int);
+    bool in_box(int, int, int);
+    bool safe_move(int, int, int);
     bool check_move(int, int, int);
-    bool is_full();
+    bool is_full(int&, int&);
     bool solve();
     bool is_solved();
     std::vector<int> get_solution();

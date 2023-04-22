@@ -31,31 +31,63 @@ void Board::place_number(int row, int col, int num) {
 
 void Board::mark_number(int row, int col, int num) { }
 
-bool Board::in_row(int row, int num) { return false; }
+bool Board::in_row(int row, int num) {
+    for (int c=0; c<m_cols; ++c) {
+        if (num == at(row, c) return true;
+    } return false;
+}
 
-bool Board::in_col(int col, int num) { return false; }
+bool Board::in_col(int col, int num) {
+    for (int r=0; r<m_rows; ++r) {
+        if (num == at(r, col)) return true;
+    } return false;
+}
 
-bool Board::in_box(int corner, int num) { return false; }
+bool Board::in_box(int row, int col, int num) {
+    int startr = row - row%3, startc = col - col%3;
+    for (int r=0; r<3; ++r) {
+        for (int c=0; c<3; ++c) {
+            if (num == at(r + startr, c + startc, num))
+                return true;
+        }
+    } return false; 
+}
+
+bool Board::safe_move(int row, int col, int num) {
+    return !in_col(col, num) && 
+           !in_row(row, num) &&
+           !in_box(row, col, num);
+}
 
 bool Board::check_move(int row, int col, int num) {
     int id = get_index(row, col);
     return m_solution[id] == num;
 }
 
-bool Board::is_full() {
-    for (int d : m_grid) { if (d == 0) return false; }
-    return true;
+// solve board TODO: at(row, col) checks the unfilled board
+bool Board::is_full(int& row, int& col) {
+    for (row=0; row<m_rows; ++row) {
+        for (col=0; col<m_cols; ++col) {
+            if (at(row, col) == 0) return false;
+        }
+    } return true;
 }
 
+// solve board TODO
 bool Board::solve() {
-    
+    int r{}, c{};
+    if (is_full(r, c)) return true;
+    for (int num=1; num<10; ++num) {
+        if (safe_move(r, c, num))
+    }
 
 
     return true;
 }
 
 bool Board::is_solved() {
-    if (!is_full()) return false;
+    int r{}, c{};
+    if (!is_full(r, c)) return false;
     for (int i=0; i<m_size; ++i) {
         if (m_grid[i] != m_solution[i])
             return false;
