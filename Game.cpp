@@ -9,10 +9,27 @@ Game::Game() {}
 
 void Game::gen_board() {}
 
+void Game::init_highlight() {
+    float size = 63.5f;
+    hl_rect.setSize(sf::Vector2f(size, size));
+    hl_rect.setFillColor(sf::Color(255, 255, 0, 100));
+}
+
+void Game::highlight_selected() {
+    hl_rect.setPosition(10.5f + m_cellx*64.5f, 10.5f + m_celly*64.5f);
+}
+
 void Game::render_terminal_board(Board& board) {
+    std::cout << "Board:" << '\n';
     for (int row=0; row<board.m_rows; ++row) {
         for (int col=0; col<board.m_cols; ++col) {
-            std::cout << board.at(row,col) << " ";
+            std::cout << board.at(row,col,board.m_grid) << " ";
+        } std::cout << '\n';
+    }
+    std::cout << "\nSolution:\n";
+    for (int row=0; row<board.m_rows; ++row) {
+        for (int col=0; col<board.m_cols; ++col) {
+            std::cout << board.at(row,col,board.m_solution) << " ";
         } std::cout << '\n';
     }
 }
@@ -54,7 +71,7 @@ void Game::render_lines(sf::RenderWindow& win) {
 void Game::render_numbers(sf::RenderWindow& win, sf::Font& font, Board& board) {
     for (int row=0; row<9; ++row) {
         for (int col=0; col<9; ++col) {
-            int val = board.at(row, col);
+            int val = board.at(row, col, board.m_grid);
             if (val == 0) continue;
             sf::Text num(std::to_string(val),font,50);
             num.setFillColor(sf::Color::White);
@@ -82,17 +99,21 @@ void Game::unselect_cell() {
 void Game::select_mode() {}
 
 void Game::run() {
+    Board board("2...965.1.694.........5...7.4.8.27.......5...856.49...6.8........1......79....2.6");
+    render_terminal_board(board);
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Sudoku");
     sf::Font font;
     font.loadFromFile("Ezme.ttf");
-    Board board("47..5...29.2...1....6..247.3.4..1...................5....4.7.3...7.....66.1..92..");
-    bool quit = false;
-    render_terminal_board(board);
+    init_highlight();
+    bool quit = false, solved = false;
     while (window.isOpen() && !quit)
     {
         sf::Event event;
         while (window.pollEvent(event)) {
             switch (event.type) {
+                case sf::Event::Closed:
+                    quit = true;
+                    break;
                 case sf::Event::MouseButtonPressed:
                     select_cell(window);
                     break;
@@ -101,21 +122,38 @@ void Game::run() {
                         quit = true;
                     } else if (event.key.code > sf::Keyboard::Num0 &&
                                event.key.code <= sf::Keyboard::Num9) {
-                        int d{};
-                        std::cout << (d = event.key.code - sf::Keyboard::Num0) << '\n';
+                        int d = event.key.code - sf::Keyboard::Num0;
                         if (m_cellx >= 0 && m_cellx < 9 && m_celly >= 0 && m_celly < 9)
                             board.place_number(m_celly, m_cellx, d);
 
                     } else if (event.key.code == sf::Keyboard::D) {
                         unselect_cell();
-                    }
-                    break;
-
+                    } else if (event.key.code == sf::Keyboard::S) {
+                        board.m_grid = board.m_solution;
+                        solved = true;
+                    } else if (event.key.code == sf::Keyboard::Left) {
+                        if (m_cellx > 0 && m_celly >= 0)
+                            m_cellx--;
+                    } else if (event.key.code == sf::Keyboard::Right) {
+                        if (m_cellx >= 0 && m_cellx < board.m_cols-1 && m_celly >= 0)
+                            m_cellx++;
+                    } else if (event.key.code == sf::Keyboard::Up) {
+                        if (m_cellx >= 0 && m_celly > 0)
+                            m_celly--;
+                    } else if (event.key.code == sf::Keyboard::Down) {
+                        if (m_cellx >= 0 && m_celly < board.m_rows-1 && m_celly >= 0)
+                            m_celly++;
+                    } break;
             }
-            if (quit) break;
         }
         window.clear(sf::Color::Black);
+        if (solved || board.m_done)
+            window.clear(sf::Color(0, 100, 0));
         render_lines(window);
+        if (m_cellx >= 0 && m_celly >= 0) {
+            highlight_selected();
+            window.draw(hl_rect);
+        }
         render_numbers(window, font, board);
         window.display();
     }
