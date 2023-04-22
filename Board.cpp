@@ -1,8 +1,7 @@
 #include "Board.hpp"
 
 
-Board::Board(std::string s) {
-    m_config_string = s;
+Board::Board(std::string s) : m_config_string(s), m_markings(81, std::vector<int>(9)) {
     parse_string();
     solve();
 }

@@ -9,14 +9,37 @@ Game::Game() {}
 
 void Game::gen_board() {}
 
+void Game::init_colors() {
+    HIGHLIGHT  = sf::Color(255, 255, 0, 150);
+    if (dark_mode) {
+        LINE_THIN  = sf::Color(255, 255, 255, 120);
+        LINE_THICK = sf::Color::White;
+        BACK       = sf::Color::Black;
+        NUMBER     = LINE_THICK;
+        return;
+    }
+    LINE_THIN  = sf::Color(50, 50, 0, 50);
+    LINE_THICK = sf::Color::Black;
+    BACK       = sf::Color::White;
+    NUMBER     = LINE_THICK;
+}
+
+void Game::starting_menu() {
+    // TODO
+}
+ 
 void Game::init_highlight() {
     float size = 63.5f;
     hl_rect.setSize(sf::Vector2f(size, size));
-    hl_rect.setFillColor(sf::Color(255, 255, 0, 100));
+    hl_rect.setFillColor(HIGHLIGHT);
 }
 
 void Game::highlight_selected() {
     hl_rect.setPosition(10.5f + m_cellx*64.5f, 10.5f + m_celly*64.5f);
+}
+
+void Game::show_markings(Board& board) {
+    // TODO
 }
 
 void Game::render_terminal_board(Board& board) {
@@ -38,30 +61,30 @@ void Game::render_lines(sf::RenderWindow& win) {
     float small_step = 64.5f;
     float big_step = 193.5f;
     for (size_t i=0; i<10; ++i) {
-        sf::Vertex lineh[] =
+        sf::Vertex thin_lineh[] =
         {
-            sf::Vertex(sf::Vector2f(10.f , 10.f + i*small_step), LIGHT),
-            sf::Vertex(sf::Vector2f(WIDTH-10.f, 10.f + i*small_step), LIGHT),
+            sf::Vertex(sf::Vector2f(      10.f, 10.f + i*small_step), LINE_THIN),
+            sf::Vertex(sf::Vector2f(WIDTH-10.f, 10.f + i*small_step), LINE_THIN),
         };
-        sf::Vertex linev[] =
+        sf::Vertex thin_linev[] =
         {
-            sf::Vertex(sf::Vector2f(10.f + i*small_step, 10.f), LIGHT),
-            sf::Vertex(sf::Vector2f(10.f + i*small_step, HEIGHT-10.f), LIGHT),
+            sf::Vertex(sf::Vector2f(10.f + i*small_step,        10.f), LINE_THIN),
+            sf::Vertex(sf::Vector2f(10.f + i*small_step, HEIGHT-10.f), LINE_THIN)
         };
-        win.draw(linev, 2, sf::Lines);
-        win.draw(lineh, 2, sf::Lines);
+        win.draw(thin_linev, 2, sf::Lines);
+        win.draw(thin_lineh, 2, sf::Lines);
     }
 
     for (size_t i=0; i<4; ++i) {
         sf::Vertex lineh[] =
         {
-            sf::Vertex(sf::Vector2f(10.f , 10.f + i*big_step)),
-            sf::Vertex(sf::Vector2f(WIDTH-10.f, 10.f + i*big_step)),
+            sf::Vertex(sf::Vector2f(      10.f, 10.f + i*big_step), LINE_THICK),
+            sf::Vertex(sf::Vector2f(WIDTH-10.f, 10.f + i*big_step), LINE_THICK)
         };
         sf::Vertex linev[] =
         {
-            sf::Vertex(sf::Vector2f(10.f + i*big_step, 10.f)),
-            sf::Vertex(sf::Vector2f(10.f + i*big_step, HEIGHT-10.f)),
+            sf::Vertex(sf::Vector2f(10.f + i*big_step,        10.f), LINE_THICK),
+            sf::Vertex(sf::Vector2f(10.f + i*big_step, HEIGHT-10.f), LINE_THICK)
         };
         win.draw(linev, 2, sf::Lines);
         win.draw(lineh, 2, sf::Lines);
@@ -74,8 +97,7 @@ void Game::render_numbers(sf::RenderWindow& win, sf::Font& font, Board& board) {
             int val = board.at(row, col, board.m_grid);
             if (val == 0) continue;
             sf::Text num(std::to_string(val),font,50);
-            num.setFillColor(sf::Color::White);
-            num.setOutlineColor(sf::Color::White);
+            num.setFillColor(NUMBER);
             num.setPosition(30.f+col*64.5f, 10.f+row*64.5f);
             win.draw(num);
         }
@@ -96,11 +118,15 @@ void Game::unselect_cell() {
     /* std::cout << m_celly << " " << m_cellx << '\n'; */
 }
 
-void Game::select_mode() {}
+void Game::select_mode() {
+    // TODO
+}
+
 
 void Game::run() {
     Board board("2...965.1.694.........5...7.4.8.27.......5...856.49...6.8........1......79....2.6");
     render_terminal_board(board);
+    init_colors();
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Sudoku");
     sf::Font font;
     font.loadFromFile("Ezme.ttf");
@@ -146,7 +172,7 @@ void Game::run() {
                     } break;
             }
         }
-        window.clear(sf::Color::Black);
+        window.clear(BACK);
         if (solved || board.m_done)
             window.clear(sf::Color(0, 100, 0));
         render_lines(window);
