@@ -1,7 +1,7 @@
 #include "Board.hpp"
 
 
-Board::Board(std::string s) : m_config_string(s), m_markings(81, std::vector<int>(9)) {
+Board::Board(std::string s) : m_config_string(s), m_markings(m_size, std::vector<bool>(m_rows, false)) {
     parse_string();
     solve();
 }
@@ -31,7 +31,10 @@ void Board::place_number(int row, int col, int num) {
     if (m_placed == m_size) m_done = true;
 }
 
-void Board::mark_number(int row, int col, int num) { }
+void Board::mark_number(int row, int col, int num) {
+    bool mark = m_markings[get_index(row, col)][num-1];
+    m_markings[get_index(row, col)][num-1] = !mark;
+}
 
 bool Board::in_row(int row, int num) {
     for (int c=0; c<m_cols; ++c) {

@@ -22,8 +22,8 @@ public:
     void starting_menu();
     void init_highlight();
     void highlight_selected();
-    void show_markings(Board&);
-    void render_terminal_board(Board&);
+    void show_markings(Board&, int, int);
+    void render_terminal_board(Board&, std::vector<int>);
     void render_lines(sf::RenderWindow&);
     void render_numbers(sf::RenderWindow&, sf::Font&, Board&);
     void select_cell(sf::RenderWindow&);

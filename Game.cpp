@@ -36,23 +36,23 @@ void Game::highlight_selected() {
     hl_rect.setPosition(10.5f + m_cellx*64.5f, 10.5f + m_celly*64.5f);
 }
 
-void Game::show_markings(Board& board) {
-    // TODO
+void Game::show_markings(Board& board, int row, int col) {
+    for (bool b : board.m_markings[board.get_index(row, col)]) {
+            std::cout << b << " ";
+    } std::cout << '\n';
 }
 
-void Game::render_terminal_board(Board& board) {
-    std::cout << "Board:" << '\n';
+void Game::render_terminal_board(Board& board, std::vector<int> grid) {
     for (int row=0; row<board.m_rows; ++row) {
+        if (row%3 == 0)
+            std::cout << "-------------------------" << '\n';
         for (int col=0; col<board.m_cols; ++col) {
-            std::cout << board.at(row,col,board.m_grid) << " ";
-        } std::cout << '\n';
-    }
-    std::cout << "\nSolution:\n";
-    for (int row=0; row<board.m_rows; ++row) {
-        for (int col=0; col<board.m_cols; ++col) {
-            std::cout << board.at(row,col,board.m_solution) << " ";
-        } std::cout << '\n';
-    }
+            if (col % 3 == 0) std::cout << "| ";
+            if (board.at(row, col, grid) == 0)
+                std::cout << "  ";
+            else std::cout << board.at(row, col, grid) << " ";
+        } std::cout << "|\n";
+    } std::cout << "-------------------------" << "\n\n";
 }
 
 void Game::render_lines(sf::RenderWindow& win) {
@@ -123,7 +123,8 @@ void Game::select_mode() {
 
 void Game::run() {
     Board board("2...965.1.694.........5...7.4.8.27.......5...856.49...6.8........1......79....2.6");
-    render_terminal_board(board);
+    render_terminal_board(board, board.m_grid);
+    render_terminal_board(board, board.m_solution);
     init_colors();
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Sudoku");
     sf::Font font;
@@ -150,6 +151,10 @@ void Game::run() {
                         if (m_mode > 0) {
                             if (m_cellx >= 0 && m_cellx < 9 && m_celly >= 0 && m_celly < 9)
                                 board.place_number(m_celly, m_cellx, d);
+                        } else {
+                            if (m_cellx >= 0 && m_cellx < 9 && m_celly >= 0 && m_celly < 9)
+                                board.mark_number(m_celly, m_cellx, d);
+                                show_markings(board, m_celly, m_cellx); 
                         }
                     } else if (event.key.code == sf::Keyboard::E) {
                         m_mode *= -1;

@@ -16,7 +16,7 @@ public:
     bool m_done = false;
     std::vector<int> m_grid = std::vector<int>(m_size, 0);
     std::vector<int> m_solution = std::vector<int>(m_size, 0);
-    std::vector<std::vector<int>> m_markings;
+    std::vector<std::vector<bool>> m_markings;
     void parse_string();
     int get_index(int, int);
     int at(int, int, std::vector<int>&);
