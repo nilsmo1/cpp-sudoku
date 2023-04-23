@@ -16,6 +16,12 @@ make run
 ```
 Either `make run` or `make && ./sudoku` work the same way.
 
+## Demo
+![](https://github.com/nilsmo1/cpp-sudoku/blob/main/sudoku_dark.png)
+
+![](https://github.com/nilsmo1/cpp-sudoku/blob/main/sudoku_light.png)
+
+
 ## Requirements
 [__SFML__](https://www.sfml-dev.org/) is required to run this game.
 
