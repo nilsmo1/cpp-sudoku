@@ -12,11 +12,12 @@ class Game {
     bool m_mode = true;
     sf::RectangleShape hl_rect;
     bool dark_mode = true;
-    sf::Color LINE_THIN, LINE_THICK, HIGHLIGHT, BACK, NUMBER;
+    sf::Color LINE_THIN, LINE_THICK, HIGHLIGHT, BACKGROUND, NUMBER, MARKING;
 public:
     int m_cellx = -1;
     int m_celly = -1;
     Game();
+    void swap_color();
     void gen_board();
     void init_colors();
     void starting_menu();

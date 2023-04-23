@@ -31,5 +31,4 @@ public:
     bool solve();
     bool is_solved();
     std::vector<int> get_solution();
-    std::vector<std::pair<int, int>> get_number_positions(int);
 };

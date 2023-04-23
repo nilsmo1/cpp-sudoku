@@ -99,15 +99,3 @@ bool Board::is_solved() {
 }
 
 std::vector<int> Board::get_solution() { return m_solution; };
-
-std::vector<std::pair<int, int>> Board::get_number_positions(int num) {
-    std::vector<std::pair<int, int>> positions;
-    int row{}, col{};
-    for (int i=0; i<m_size; ++i) { 
-        if (m_grid[i] == num) {
-            row = i / m_rows;
-            col = i % m_cols;
-            positions.push_back(std::make_pair(row, col));
-        }
-    } return positions;
-}
