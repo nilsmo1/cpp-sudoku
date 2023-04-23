@@ -42,6 +42,33 @@ void Game::show_markings(Board& board, int row, int col) {
     } std::cout << '\n';
 }
 
+void Game::render_markings(sf::RenderWindow& win, sf::Font& font, Board& board) {
+    for (int row=0; row<9; ++row) {
+        for (int col=0; col<9; ++col) {
+            if (board.m_grid[board.get_index(row, col)] != 0) continue;
+            std::vector<bool> ms = board.m_markings[board.get_index(row, col)];
+            for (int m=0; m<board.m_rows; ++m) {
+                bool b = ms[m];
+                if (b) {
+                    sf::Text num(std::to_string(m+1), font, 20);
+                    num.setFillColor(sf::Color::White);
+                    num.setPosition(
+                            12.f + col * 64.5f + (m % 3) * 20.f,
+                            12.f + row * 64.5f + (m / 3) * 20.f
+                    );
+                    win.draw(num);
+                }
+            }
+            /* int val = board.at(row, col, board.m_grid); */
+            /* if (val == 0) continue; */
+            /* sf::Text num(std::to_string(val),font,50); */
+            /* num.setFillColor(NUMBER); */
+            /* num.setPosition(30.f+col*64.5f, 10.f+row*64.5f); */
+            /* win.draw(num); */
+        }
+    }
+}
+
 void Game::render_terminal_board(Board& board, std::vector<int> grid) {
     for (int row=0; row<board.m_rows; ++row) {
         if (row%3 == 0)
@@ -107,19 +134,11 @@ void Game::select_cell(sf::RenderWindow& win) {
     float div = 64.5f;
     m_cellx = (int)((mouse_pos.x-10) / div);
     m_celly = (int)((mouse_pos.y-10) / div);
-    /* std::cout << m_cellx << " " << m_celly << '\n'; */
 }
 
-void Game::unselect_cell() {
-    m_cellx = -1;
-    m_celly = -1;
-    /* std::cout << m_celly << " " << m_cellx << '\n'; */
-}
+void Game::unselect_cell() { m_cellx = -1; m_celly = -1; }
 
-void Game::select_mode() {
-    // TODO
-}
-
+void Game::swap_mode() { m_mode = !m_mode; }
 
 void Game::run() {
     Board board("2...965.1.694.........5...7.4.8.27.......5...856.49...6.8........1......79....2.6");
@@ -148,16 +167,15 @@ void Game::run() {
                     } else if (event.key.code > sf::Keyboard::Num0 &&
                                event.key.code <= sf::Keyboard::Num9) {
                         int d = event.key.code - sf::Keyboard::Num0;
-                        if (m_mode > 0) {
+                        if (m_mode) {
                             if (m_cellx >= 0 && m_cellx < 9 && m_celly >= 0 && m_celly < 9)
                                 board.place_number(m_celly, m_cellx, d);
                         } else {
                             if (m_cellx >= 0 && m_cellx < 9 && m_celly >= 0 && m_celly < 9)
                                 board.mark_number(m_celly, m_cellx, d);
-                                show_markings(board, m_celly, m_cellx); 
                         }
                     } else if (event.key.code == sf::Keyboard::E) {
-                        m_mode *= -1;
+                        swap_mode();
                     } else if (event.key.code == sf::Keyboard::D) {
                         unselect_cell();
                     } else if (event.key.code == sf::Keyboard::S) {
@@ -187,6 +205,7 @@ void Game::run() {
             window.draw(hl_rect);
         }
         render_numbers(window, font, board);
+        render_markings(window, font, board);
         window.display();
     }
     window.close();
