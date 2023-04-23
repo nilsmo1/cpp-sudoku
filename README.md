@@ -3,14 +3,19 @@
 ## Quick start
 Clone the repository and run the following:
 
-Either
+SSH
 ```console
-make && ./sudoku
+git clone git@github.com:nilsmo1/cpp-sudoku.git 
+cd cpp-sudoku/
+make clean run
 ```
-or 
+HTTPS
 ```console
+git clone https://github.com/nilsmo1/cpp-sudoku.git
+cd cpp-sudoku/
 make run
 ```
+Either `make run` or `make && ./sudoku` work the same way.
 
 ## Requirements
 [__SFML__](https://www.sfml-dev.org/) is required to run this game.
