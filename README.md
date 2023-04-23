@@ -25,6 +25,6 @@ Select a cell using the mouse, when a cell is selected you can deselect it with 
 
 Pressing __s__ solves the board.
 
-Pressing __e__ changed cycles the placement mode, either placement or marking.
+Pressing __e__ cycles the placement mode, either placement or marking.
 
 Quit the game by pressing __q__ or closing the window!
