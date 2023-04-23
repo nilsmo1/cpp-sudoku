@@ -150,6 +150,7 @@ void Game::run() {
     render_terminal_board(board, board.m_solution);
     init_colors();
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Sudoku");
+    window.setFramerateLimit(20);
     sf::Font font;
     font.loadFromFile("nk57-monospace-se-lt.ttf");
     init_highlight();
