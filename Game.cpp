@@ -13,8 +13,8 @@ void Game::swap_color() {
 void Game::gen_board() {}
 
 void Game::init_colors() {
-    HIGHLIGHT = sf::Color(255, 255,   0, 150);
-    MARKING   = sf::Color(  0, 255, 100, 150);
+    HIGHLIGHT = sf::Color(255, 255,  0, 150);
+    MARKING   = sf::Color(0, 255, 100 , 150);
     if (dark_mode) {
         LINE_THIN  = sf::Color(255, 255, 255, 120);
         LINE_THICK = sf::Color::White;
@@ -59,7 +59,7 @@ void Game::render_markings(sf::RenderWindow& win, sf::Font& font, Board& board) 
                     sf::Text num(std::to_string(m+1), font, 20);
                     num.setFillColor(NUMBER);
                     num.setPosition(
-                            18.f + col * 64.5f + (m % 3) * 20.f,
+                            13.f + col * 64.5f + (m % 3) * 20.f,
                             10.f + row * 64.5f + (m / 3) * 20.f
                     );
                     win.draw(num);
@@ -123,7 +123,7 @@ void Game::render_numbers(sf::RenderWindow& win, sf::Font& font, Board& board) {
             if (val == 0) continue;
             sf::Text num(std::to_string(val),font,50);
             num.setFillColor(NUMBER);
-            num.setPosition(30.f+col*64.5f, 10.f+row*64.5f);
+            num.setPosition(23.f+col*64.5f, 12.f+row*64.5f);
             win.draw(num);
         }
     }
@@ -151,7 +151,7 @@ void Game::run() {
     init_colors();
     sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Sudoku");
     sf::Font font;
-    font.loadFromFile("Ezme.ttf");
+    font.loadFromFile("nk57-monospace-se-lt.ttf");
     init_highlight();
     bool quit = false, solved = false;
     while (window.isOpen() && !quit)
