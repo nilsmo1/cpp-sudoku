@@ -2,8 +2,6 @@
 I like sudoku and felt like playing it - so I made a little game.
 
 ## Quick start
-Clone the repository and run the following:
-
 SSH
 ```console
 git clone git@github.com:nilsmo1/cpp-sudoku.git 
