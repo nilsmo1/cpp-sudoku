@@ -60,7 +60,7 @@ void Game::render_markings(sf::RenderWindow& win, sf::Font& font, Board& board) 
                     num.setFillColor(NUMBER);
                     num.setPosition(
                             13.f + col * 64.5f + (m % 3) * 20.f,
-                            10.f + row * 64.5f + (m / 3) * 20.f
+                            10.f + row * 64.5f + ((float)m / 3) * 20.f
                     );
                     win.draw(num);
                 }
@@ -202,7 +202,9 @@ void Game::run() {
                     } else if (event.key.code == sf::Keyboard::Down) {
                         if (m_cellx >= 0 && m_celly < board.m_rows-1 && m_celly >= 0) m_celly++;
                     } break;
+		default: break;
             }
+
         }
         window.clear(BACKGROUND);
         if (solved || board.m_done)
